@@ -64,9 +64,9 @@ with col1:
 
 with col2:
     if not us_df.empty:
-        pie_data_us = us_df.groupby('Broker', as_index=False)['Investment'].sum()
+        pie_data_us = us_df.groupby('Stock', as_index=False)['Investment'].sum()
         fig2 = px.pie(pie_data_us, names='Broker', values='Investment', hole=0.3,
-                      title="US Investments (USD)", width=350, height=350)
+                      title="US Investment Distribution by Stock", width=350, height=350)
         st.plotly_chart(fig2, use_container_width=True)
 
 # Summary Table
@@ -87,8 +87,9 @@ st.dataframe(summary_df, use_container_width=True)
 
 # Bar Charts with % Labels
 def plot_bar_with_labels(data, title):
-    fig = px.bar(data, x='Stock', y='Gain', color='Broker', title=title, text='Gain')
-    fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+    data['GainLabel'] = data['Gain'].map('{:.2f}'.format)
+    fig = px.bar(data, x='Stock', y='Gain', color='Broker', title=title, text='GainLabel')
+    fig.update_traces(texttemplate='%{text}%', textposition='outside')
     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
     return fig
 
