@@ -11,14 +11,17 @@ st.markdown("<marquee>📈 Live Portfolio View | Track Your Indian and US Stock 
 # Load data
 df = load_data()
 
-# Data cleaning
+# Clean and prepare data
+df.columns = df.columns.str.strip()
 df['Investment'] = pd.to_numeric(df['Investment'], errors='coerce')
 df['Gain'] = df['Gain'].astype(str).str.replace('%', '', regex=False).astype(float)
 df['Quantity'] = pd.to_numeric(df['Quantity'], errors='coerce')
+df['Type'] = df['Type'].str.strip().str.lower()
+df['Broker'] = df['Broker'].str.strip()
 
 # Separate Indian and US stocks
-indian_df = df[df['Type'].str.lower() == 'indian']
-us_df = df[df['Type'].str.lower() == 'us']
+indian_df = df[df['Type'] == 'indian']
+us_df = df[df['Type'] == 'us']
 
 # Combined Indian investments summary
 total_investment_inr = indian_df['Investment'].sum()
@@ -27,8 +30,9 @@ avg_gain_inr = round((total_gain_inr / total_investment_inr) * 100, 2)
 
 # Pie chart by Broker (Indian only)
 st.subheader("📊 Investment Distribution by Broker (INR only)")
-broker_inr = indian_df.groupby('Broker')['Investment'].sum().reset_index()
-fig_broker = px.pie(broker_inr, names='Broker', values='Investment', title="Indian Investment by Broker", hole=0.3)
+broker_inr = indian_df.groupby('Broker', as_index=False)['Investment'].sum()
+fig_broker = px.pie(broker_inr, names='Broker', values='Investment',
+                    title="Indian Investment by Broker", hole=0.3)
 st.plotly_chart(fig_broker, use_container_width=True)
 
 # Combined Summary Table
