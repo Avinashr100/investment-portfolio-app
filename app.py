@@ -1,4 +1,3 @@
-import streamlit as st
 st.set_page_config(page_title="Investment in Securities Oversight Board", layout="wide")
 
 # Enhanced professional style
@@ -23,10 +22,7 @@ td:nth-child(2) {
 st.image("https://source.unsplash.com/featured/?finance,stock", use_column_width=True)
 
 # Inject CSS for table styling
-st.markdown(
-    "<style>thead tr th { background-color: #003366; color: white; } td:nth-child(2) {{ text-align: center; }}</style>",
-    unsafe_allow_html=True
-)
+
 
 st.title("Investment in Securities Oversight Board")
 
