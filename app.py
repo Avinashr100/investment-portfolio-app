@@ -8,7 +8,7 @@ st.set_page_config(page_title="Investment in Securities Oversight Board", layout
 st.markdown("""
 <style>
 body {
-    font-size: 18px;
+    font-size: 20px;
     color: #111111;
 }
 thead tr th {
@@ -27,7 +27,7 @@ st.markdown("""
 <style>
 body {
     background-color: #f4f4f4;
-    font-size: 18px;
+    font-size: 20px;
     color: #111111;
 }
 thead tr th {
@@ -40,6 +40,7 @@ td:nth-child(2) {
 </style>
 """, unsafe_allow_html=True)
 
+# Add a header image
 
 # Inject CSS for table styling
 
@@ -140,9 +141,16 @@ st.dataframe(summary_df, use_container_width=True)
 # Bar Charts with % Labels
 def plot_bar_with_labels(data, title):
     data['GainLabel'] = data['Gain'].map('{:.2f}'.format)
-    fig = px.bar(data, x='Stock', y='Gain', color='Broker', title=title, text='GainLabel')
-    fig.update_traces(texttemplate='%{text}%', textposition='auto', cliponaxis=False)
-    fig.update_layout(uniformtext_minsize=8, uniformtext_mode='show', margin=dict(t=40, b=40))
+    fig = px.bar(data, x='Stock', y='Gain', color='Stock', title=title, text='GainLabel',
+                 color_discrete_sequence=px.colors.qualitative.Safe)
+    fig.update_traces(texttemplate='%{text}%', textposition='outside', cliponaxis=False)
+    fig.update_layout(
+        uniformtext_minsize=8,
+        uniformtext_mode='show',
+        margin=dict(t=40, b=40),
+        title={'x': 0.5, 'xanchor': 'center'},
+        font=dict(size=16)
+    )
     return fig
 
 if not indian_df.empty:
