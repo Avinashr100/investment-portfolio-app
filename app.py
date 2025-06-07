@@ -13,19 +13,7 @@ st.markdown(
 
 st.title("Investment in Securities Oversight Board")
 
-# Dynamic marquee with top gainers and losers
-def get_marquee_text(df, label):
-    if df.empty or 'Gain' not in df.columns:
-        return f"{label}: No data"
-    top = df.loc[df['Gain'].idxmax()]
-    bottom = df.loc[df['Gain'].idxmin()]
-    return f"{label} ↑ {top['Stock']} ({top['Gain']:.1f}%) ↓ {bottom['Stock']} ({bottom['Gain']:.1f}%)"
 
-indian_text = get_marquee_text(indian_df, "🇮🇳 Indian")
-us_text = get_marquee_text(us_df, "🇺🇸 US")
-marquee_text = f"{indian_text} | {us_text}"
-
-st.markdown(f"<marquee>{marquee_text}</marquee>", unsafe_allow_html=True)
 
 
 # Load and clean data
@@ -48,6 +36,21 @@ if 'Investment' in df.columns and 'Current Value' in df.columns:
 # Split data
 indian_df = df[df['Type'] == 'indian'].copy()
 us_df = df[df['Type'] == 'us'].copy()
+
+# Dynamic marquee with top gainers and losers
+def get_marquee_text(df, label):
+    if df.empty or 'Gain' not in df.columns:
+        return f"{label}: No data"
+    top = df.loc[df['Gain'].idxmax()]
+    bottom = df.loc[df['Gain'].idxmin()]
+    return f"{label} ↑ {top['Stock']} ({top['Gain']:.1f}%) ↓ {bottom['Stock']} ({bottom['Gain']:.1f}%)"
+
+indian_text = get_marquee_text(indian_df, "🇮🇳 Indian")
+us_text = get_marquee_text(us_df, "🇺🇸 US")
+marquee_text = f"{indian_text} | {us_text}"
+
+st.markdown(f"<marquee>{marquee_text}</marquee>", unsafe_allow_html=True)
+
 
 # Formatter
 def format_currency(val, currency='INR'):
