@@ -1,9 +1,25 @@
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-from data.google_sheets_connector import load_data
-
 st.set_page_config(page_title="Investment in Securities Oversight Board", layout="wide")
+
+# Enhanced professional style
+st.markdown("""
+<style>
+body {
+    background-color: #f4f4f4;
+    font-size: 18px;
+    color: #111111;
+}
+thead tr th {
+    background-color: #003366;
+    color: white;
+}
+td:nth-child(2) {
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Add a header image
+st.image("https://source.unsplash.com/featured/?finance,stock", use_column_width=True)
 
 # Inject CSS for table styling
 st.markdown(
