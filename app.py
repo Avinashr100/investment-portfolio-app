@@ -7,7 +7,7 @@ st.set_page_config(page_title="Investment in Securities Oversight Board", layout
 st.markdown("""
 <style>
 body {
-    font-size: 18px;
+    font-size: 25px;
     color: #111111;
 }
 </style>
