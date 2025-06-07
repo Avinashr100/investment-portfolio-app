@@ -7,7 +7,7 @@ st.set_page_config(page_title="Investment in Securities Oversight Board", layout
 
 # Inject CSS for table styling
 st.markdown(
-    "<style>thead tr th { background-color: #003366; color: white; }</style>",
+    "<style>thead tr th { background-color: #003366; color: white; } td:nth-child(2) {{ text-align: center; }}</style>",
     unsafe_allow_html=True
 )
 
@@ -74,15 +74,15 @@ col1, col2 = st.columns(2)
 
 with col1:
     if not indian_df.empty:
-        pie_data_indian = indian_df.groupby('Broker', as_index=False)['Investment'].sum()
-        fig1 = px.pie(pie_data_indian, names='Broker', values='Investment', hole=0.3,
+        pie_data_indian = indian_df.groupby('Broker', as_index=False)['Current Value'].sum()
+        fig1 = px.pie(pie_data_indian, names='Broker', values='Current Value', hole=0.3,
                       title="Indian Investments (INR)", width=350, height=350)
         st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
     if not us_df.empty:
-        pie_data_us = us_df.groupby('Stock', as_index=False)['Investment'].sum()
-        fig2 = px.pie(pie_data_us, names='Stock', values='Investment', hole=0.3,
+        pie_data_us = us_df.groupby('Stock', as_index=False)['Current Value'].sum()
+        fig2 = px.pie(pie_data_us, names='Stock', values='Current Value', hole=0.3,
                       title="US Investment Distribution by Stock", width=350, height=350)
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -92,11 +92,13 @@ summary_df = pd.DataFrame([
     {
         "Market": "Indian Stocks (INR)",
         "Total Investment": format_currency(total_investment_inr, 'INR'),
+        "Current Value": format_currency(indian_df['Current Value'].sum(), 'INR'),
         "Avg Gain/Loss %": f"{avg_gain_inr:.2f}%"
     },
     {
         "Market": "US Stocks (USD)",
         "Total Investment": format_currency(total_investment_usd, 'USD'),
+        "Current Value": format_currency(us_df['Current Value'].sum(), 'USD'),
         "Avg Gain/Loss %": f"{avg_gain_usd:.2f}%"
     }
 ])
