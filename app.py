@@ -41,7 +41,7 @@ td:nth-child(2) {
 """, unsafe_allow_html=True)
 
 # Add a header image
-st.image("https://source.unsplash.com/featured/?finance,stock", use_container_width=True)
+st.image("https://images.unsplash.com/photo-1565372514083-b27a3c0c7b07?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", use_container_width=True)
 
 # Inject CSS for table styling
 
