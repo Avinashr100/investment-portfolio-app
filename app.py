@@ -65,7 +65,7 @@ with col1:
 with col2:
     if not us_df.empty:
         pie_data_us = us_df.groupby('Stock', as_index=False)['Investment'].sum()
-        fig2 = px.pie(pie_data_us, names='Broker', values='Investment', hole=0.3,
+        fig2 = px.pie(pie_data_us, names='Stock', values='Investment', hole=0.3,
                       title="US Investment Distribution by Stock", width=350, height=350)
         st.plotly_chart(fig2, use_container_width=True)
 
