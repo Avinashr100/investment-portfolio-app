@@ -11,31 +11,44 @@ st.markdown("<marquee>📈 Live Portfolio View | Track Your Indian and US Stock 
 # Load data
 df = load_data()
 
-# Data cleaning
+# Standardize column headers
 df.columns = df.columns.str.strip()
+
+# Clean numeric columns if they exist
 for col in ['Investment', 'Current Value', 'Quantity']:
-    df[col] = df[col].astype(str).str.replace(',', '', regex=False)
-    df[col] = pd.to_numeric(df[col], errors='coerce')
+    if col in df.columns:
+        df[col] = df[col].astype(str).str.replace(',', '', regex=False)
+        df[col] = pd.to_numeric(df[col], errors='coerce')
 
-df['Type'] = df['Type'].str.strip().str.lower()
-df['Broker'] = df['Broker'].str.strip()
-df['Stock'] = df['Stock'].str.strip()
+# Clean categorical columns
+df['Type'] = df['Type'].astype(str).str.strip().str.lower()
+df['Broker'] = df['Broker'].astype(str).str.strip()
+df['Stock'] = df['Stock'].astype(str).str.strip()
 
-# Compute actual gain %: (Current Value - Investment) / Investment * 100
-df['Gain'] = ((df['Current Value'] - df['Investment']) / df['Investment']) * 100
+# Compute gain if possible
+if 'Investment' in df.columns and 'Current Value' in df.columns:
+    df['Gain'] = ((df['Current Value'] - df['Investment']) / df['Investment']) * 100
 
 # Split by type
 indian_df = df[df['Type'] == 'indian'].copy()
 us_df = df[df['Type'] == 'us'].copy()
 
-# Summary calculations
+# Currency formatting helper
+def format_currency(val, currency='INR'):
+    if pd.isna(val):
+        return "-"
+    symbol = '₹' if currency == 'INR' else '$'
+    return f"{symbol}{val:,.0f}"
+
+# Indian summary
 total_investment_inr = indian_df['Investment'].sum()
 total_gain_inr = indian_df['Current Value'].sum() - total_investment_inr
-avg_gain_inr = round((total_gain_inr / total_investment_inr) * 100, 2)
+avg_gain_inr = round((total_gain_inr / total_investment_inr) * 100, 2) if total_investment_inr > 0 else 0
 
+# US summary
 total_investment_usd = us_df['Investment'].sum()
 total_gain_usd = us_df['Current Value'].sum() - total_investment_usd
-avg_gain_usd = round((total_gain_usd / total_investment_usd) * 100, 2)
+avg_gain_usd = round((total_gain_usd / total_investment_usd) * 100, 2) if total_investment_usd > 0 else 0
 
 # PIE CHART - Indian investments by Broker
 st.subheader("📊 Investment Distribution by Broker (INR only)")
@@ -52,13 +65,13 @@ st.subheader("📋 Investment Summary (INR vs USD)")
 summary_df = pd.DataFrame([
     {
         "Market": "Indian Stocks (INR)",
-        "Total Investment": total_investment_inr,
-        "Avg Gain/Loss %": avg_gain_inr
+        "Total Investment": format_currency(total_investment_inr, 'INR'),
+        "Avg Gain/Loss %": f"{avg_gain_inr:.2f}%"
     },
     {
         "Market": "US Stocks (USD)",
-        "Total Investment": total_investment_usd,
-        "Avg Gain/Loss %": avg_gain_usd
+        "Total Investment": format_currency(total_investment_usd, 'USD'),
+        "Avg Gain/Loss %": f"{avg_gain_usd:.2f}%"
     }
 ])
 st.dataframe(summary_df, use_container_width=True)
@@ -79,8 +92,16 @@ if not us_df.empty:
 # Tables
 if not indian_df.empty:
     st.subheader("📑 All Indian Holdings")
-    st.dataframe(indian_df[['Stock', 'Broker', 'Quantity', 'Investment', 'Current Value', 'Gain']], use_container_width=True)
+    df_display = indian_df[['Stock', 'Broker', 'Quantity', 'Investment', 'Current Value', 'Gain']].copy()
+    df_display['Investment'] = df_display['Investment'].apply(lambda x: format_currency(x, 'INR'))
+    df_display['Current Value'] = df_display['Current Value'].apply(lambda x: format_currency(x, 'INR'))
+    df_display['Gain'] = df_display['Gain'].map('{:.2f}%'.format)
+    st.dataframe(df_display, use_container_width=True)
 
 if not us_df.empty:
     st.subheader("📑 All US Holdings")
-    st.dataframe(us_df[['Stock', 'Broker', 'Quantity', 'Investment', 'Current Value', 'Gain']], use_container_width=True)
+    df_display = us_df[['Stock', 'Broker', 'Quantity', 'Investment', 'Current Value', 'Gain']].copy()
+    df_display['Investment'] = df_display['Investment'].apply(lambda x: format_currency(x, 'USD'))
+    df_display['Current Value'] = df_display['Current Value'].apply(lambda x: format_currency(x, 'USD'))
+    df_display['Gain'] = df_display['Gain'].map('{:.2f}%'.format)
+    st.dataframe(df_display, use_container_width=True)
