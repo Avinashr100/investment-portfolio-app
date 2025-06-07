@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+from data.google_sheets_connector import load_data
 st.set_page_config(page_title="Investment in Securities Oversight Board", layout="wide")
 
 st.markdown("""
