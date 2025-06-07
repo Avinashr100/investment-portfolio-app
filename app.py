@@ -4,6 +4,14 @@ import plotly.express as px
 from data.google_sheets_connector import load_data
 
 st.set_page_config(page_title="Investment in Securities Oversight Board", layout="wide")
+st.markdown("""
+<style>
+body {
+    font-size: 18px;
+    color: #111111;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Inject CSS for table styling
 st.markdown(
