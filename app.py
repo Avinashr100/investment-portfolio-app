@@ -12,7 +12,21 @@ st.markdown(
 )
 
 st.title("Investment in Securities Oversight Board")
-st.markdown("<marquee>📈 Live Portfolio View | Track Your Indian and US Stock Investments</marquee>", unsafe_allow_html=True)
+
+# Dynamic marquee with top gainers and losers
+def get_marquee_text(df, label):
+    if df.empty or 'Gain' not in df.columns:
+        return f"{label}: No data"
+    top = df.loc[df['Gain'].idxmax()]
+    bottom = df.loc[df['Gain'].idxmin()]
+    return f"{label} ↑ {top['Stock']} ({top['Gain']:.1f}%) ↓ {bottom['Stock']} ({bottom['Gain']:.1f}%)"
+
+indian_text = get_marquee_text(indian_df, "🇮🇳 Indian")
+us_text = get_marquee_text(us_df, "🇺🇸 US")
+marquee_text = f"{indian_text} | {us_text}"
+
+st.markdown(f"<marquee>{marquee_text}</marquee>", unsafe_allow_html=True)
+
 
 # Load and clean data
 df = load_data()
