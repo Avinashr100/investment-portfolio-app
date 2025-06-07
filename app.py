@@ -174,8 +174,10 @@ st.dataframe(summary_df, use_container_width=True)
 
 # Bar Charts with % Labels
 def plot_bar_with_labels(data, title):
+    import textwrap
+    data['WrappedStock'] = data['Stock'].apply(lambda x: '<br>'.join(textwrap.wrap(x, width=10)))
     data['GainLabel'] = data['Gain'].map('{:.2f}'.format)
-    fig = px.bar(data, x='Stock', y='Gain', color='Stock', title=title, text='GainLabel',
+    fig = px.bar(data, x='WrappedStock', y='Gain', color='Stock', title=title, text='GainLabel',
                  color_discrete_sequence=px.colors.qualitative.Dark24)
     fig.update_traces(texttemplate='%{text}%', textposition='outside', cliponaxis=False)
     fig.update_layout(
@@ -186,7 +188,7 @@ def plot_bar_with_labels(data, title):
         font=dict(size=16),
         xaxis_tickfont=dict(size=14),
     )
-    fig.update_xaxes(tickangle=45, tickfont=dict(size=14), ticklabeloverflow="allow", automargin=True)
+    fig.update_xaxes(tickangle=0, automargin=True)
     return fig
 
 if not indian_df.empty:
