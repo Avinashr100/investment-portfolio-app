@@ -1,23 +1,45 @@
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-from data.google_sheets_connector import load_data
-
 st.set_page_config(page_title="Investment in Securities Oversight Board", layout="wide")
+
 st.markdown("""
 <style>
 body {
     font-size: 18px;
     color: #111111;
 }
+thead tr th {
+    background-color: #003366;
+    color: white;
+}
+td:nth-child(2) {
+    text-align: center;
+}
 </style>
 """, unsafe_allow_html=True)
 
+
+# Enhanced professional style
+st.markdown("""
+<style>
+body {
+    background-color: #f4f4f4;
+    font-size: 18px;
+    color: #111111;
+}
+thead tr th {
+    background-color: #003366;
+    color: white;
+}
+td:nth-child(2) {
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Add a header image
+st.image("https://source.unsplash.com/featured/?finance,stock", use_column_width=True)
+
 # Inject CSS for table styling
-st.markdown(
-    "<style>thead tr th { background-color: #003366; color: white; } td:nth-child(2) {{ text-align: center; }}</style>",
-    unsafe_allow_html=True
-)
+
 
 st.title("Investment in Securities Oversight Board")
 
@@ -116,8 +138,8 @@ st.dataframe(summary_df, use_container_width=True)
 def plot_bar_with_labels(data, title):
     data['GainLabel'] = data['Gain'].map('{:.2f}'.format)
     fig = px.bar(data, x='Stock', y='Gain', color='Broker', title=title, text='GainLabel')
-    fig.update_traces(texttemplate='%{text}%', textposition='outside')
-    fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+    fig.update_traces(texttemplate='%{text}%', textposition='auto', cliponaxis=False)
+    fig.update_layout(uniformtext_minsize=8, uniformtext_mode='show', margin=dict(t=40, b=40))
     return fig
 
 if not indian_df.empty:
