@@ -14,6 +14,23 @@ body {
 thead tr th {
     background-color: #003366;
     color: white;
+    font-size: 18px;
+}
+tbody td {
+    font-size: 16px;
+}
+td:nth-child(2) {
+    text-align: center;
+}
+</style>
+<style>
+body {
+    font-size: 20px;
+    color: #111111;
+}
+thead tr th {
+    background-color: #003366;
+    color: white;
 }
 td:nth-child(2) {
     text-align: center;
@@ -24,6 +41,23 @@ td:nth-child(2) {
 
 # Enhanced professional style
 st.markdown("""
+<style>
+body {
+    font-size: 20px;
+    color: #111111;
+}
+thead tr th {
+    background-color: #003366;
+    color: white;
+    font-size: 18px;
+}
+tbody td {
+    font-size: 16px;
+}
+td:nth-child(2) {
+    text-align: center;
+}
+</style>
 <style>
 body {
     background-color: #f4f4f4;
@@ -142,15 +176,17 @@ st.dataframe(summary_df, use_container_width=True)
 def plot_bar_with_labels(data, title):
     data['GainLabel'] = data['Gain'].map('{:.2f}'.format)
     fig = px.bar(data, x='Stock', y='Gain', color='Stock', title=title, text='GainLabel',
-                 color_discrete_sequence=px.colors.qualitative.Safe)
+                 color_discrete_sequence=px.colors.qualitative.Dark24)
     fig.update_traces(texttemplate='%{text}%', textposition='outside', cliponaxis=False)
     fig.update_layout(
         uniformtext_minsize=8,
         uniformtext_mode='show',
         margin=dict(t=40, b=40),
         title={'x': 0.5, 'xanchor': 'center'},
-        font=dict(size=16)
+        font=dict(size=16),
+        xaxis_tickfont=dict(size=14),
     )
+    fig.update_xaxes(tickangle=45, tickfont=dict(size=14), ticklabeloverflow="allow", automargin=True)
     return fig
 
 if not indian_df.empty:
