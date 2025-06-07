@@ -22,6 +22,7 @@ for col in ['Investment', 'Current Value', 'Quantity']:
 
 # Clean categorical columns
 df['Type'] = df['Type'].astype(str).str.strip().str.lower()
+df['Type'] = df['Type'].apply(lambda x: 'us' if 'us' in x else 'indian')
 df['Broker'] = df['Broker'].astype(str).str.strip()
 df['Stock'] = df['Stock'].astype(str).str.strip()
 
